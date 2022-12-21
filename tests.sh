@@ -43,6 +43,8 @@ for task in $tasks; do
 			temp_file="$(mktemp)"
 			timeout 3 "./$task.exe" < "$test_dir/tests/$task/${test}-in" &> "$temp_file"
 
+            sed -i 's/\x00$//g' "$temp_file"
+
 			if diff -Z "$temp_file" "$test_dir/tests/$task/${test}-out" > /dev/null; then
 				echo "Test \"${test}\": OK" >> $results
 				correct_tests=$((correct_tests+1))
